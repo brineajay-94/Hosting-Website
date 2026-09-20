@@ -74,6 +74,9 @@ bt_db_create() { # $1 db, $2 user, $3 pass
   bt_sql "CREATE DATABASE IF NOT EXISTS \`$1\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;" || return 1
   bt_sql "CREATE USER IF NOT EXISTS '$1'@'localhost' IDENTIFIED BY '$2';" || return 1
   bt_sql "CREATE USER IF NOT EXISTS '$1'@'127.0.0.1' IDENTIFIED BY '$2';" || return 1
+  # Force the password to match config.php (CREATE USER IF NOT EXISTS keeps the old one)
+  bt_sql "ALTER USER '$1'@'localhost' IDENTIFIED BY '$2';" || return 1
+  bt_sql "ALTER USER '$1'@'127.0.0.1' IDENTIFIED BY '$2';" || return 1
   bt_sql "GRANT ALL PRIVILEGES ON \`$1\`.* TO '$1'@'localhost'; GRANT ALL PRIVILEGES ON \`$1\`.* TO '$1'@'127.0.0.1'; FLUSH PRIVILEGES;" || return 1
 }
 
