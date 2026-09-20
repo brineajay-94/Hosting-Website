@@ -1,0 +1,15 @@
+# OS / editor junk
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# Installer runtime state and logs (server-side only)
+*.log
+state.env
+
+# Real generated config with credentials — never commit
+config.php
+site/config.php
+site/uploads/*
+!site/uploads/.keep

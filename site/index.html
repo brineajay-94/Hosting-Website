@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="index, follow" />
+    <title>Hosting — Server Plans, VPS &amp; Domains</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <script>
+      // Apply the active theme before first paint so nothing ever flashes the
+      // default palette. `?preview=<theme>` wins over the saved theme so theme
+      // previews open flash-free too. Keys must stay in sync with
+      // client/src/ui/themes.js.
+      try {
+        var keys = ['fire', 'green', 'red', 'blue', 'winter'];
+        var preview = new URLSearchParams(location.search).get('preview');
+        if (keys.indexOf(preview) < 0) preview = sessionStorage.getItem('site-theme-preview');
+        var t = keys.indexOf(preview) >= 0 ? preview : localStorage.getItem('site-theme');
+        if (keys.indexOf(t) >= 0) {
+          document.documentElement.setAttribute('data-theme', t);
+        }
+
+        // Layout keys must stay in sync with client/src/ui/layouts.js.
+        var layouts = ['classic', 'rail', 'centered'];
+        var l = localStorage.getItem('site-layout');
+        if (layouts.indexOf(l) >= 0) {
+          document.documentElement.setAttribute('data-layout', l);
+        }
+      } catch (e) { /* storage unavailable — fall back to the defaults */ }
+    </script>
+    <script type="module" crossorigin src="/assets/index-DY8090RS.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-BEKpIUJr.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
