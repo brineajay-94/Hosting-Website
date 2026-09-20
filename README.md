@@ -7,6 +7,14 @@ An interactive installer/menu that sets up and manages a hosting website
 
 ## Install
 
+One line (bootstrap clones/updates and opens the menu):
+
+```bash
+bash <(curl -s https://raw.githubusercontent.com/brineajay-94/Hosting-Website/main/install.sh)
+```
+
+Or manually:
+
 ```bash
 git clone https://github.com/brineajay-94/Hosting-Website.git
 cd Hosting-Website
@@ -19,6 +27,17 @@ menu from anywhere:
 ```bash
 sudo brinestudios
 ```
+
+### Own short URL
+
+Serve `install.sh` from your own domain with the bundled Cloudflare
+Worker (`cloudflare/install-worker.js`), then run:
+
+```bash
+bash <(curl -s https://install.your-domain.com)
+```
+
+See [INSTALL.md](INSTALL.md) for details.
 
 Then pick:
 
