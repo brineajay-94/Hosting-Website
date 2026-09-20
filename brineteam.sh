@@ -19,6 +19,8 @@ BT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 . "$BT_ROOT/installer/lib/deps.sh"
 # shellcheck source=installer/lib/site.sh
 . "$BT_ROOT/installer/lib/site.sh"
+# shellcheck source=installer/lib/users.sh
+. "$BT_ROOT/installer/lib/users.sh"
 
 bt_require_root
 bt_ensure_state_dir
@@ -47,15 +49,17 @@ main() {
         "2:Uninstall website" \
         "3:Update website" \
         "4:Reinstall website" \
-        "5:Show status & statistics" \
-        "6:Exit"
+        "5:Manage admin users" \
+        "6:Show status & statistics" \
+        "7:Exit"
       case "$BT_CHOICE" in
         1) bt_install_deps; bt_pause ;;
         2) bt_uninstall_site; bt_load_state; bt_pause ;;
         3) bt_update_site; bt_pause ;;
         4) bt_reinstall_site; bt_load_state; bt_pause ;;
-        5) bt_show_statistics; bt_pause ;;
-        6|q|Q) running=0 ;;
+        5) bt_manage_admins; bt_pause ;;
+        6) bt_show_statistics; bt_pause ;;
+        7|q|Q) running=0 ;;
         *) bt_warn "Invalid option."; sleep 1 ;;
       esac
     else

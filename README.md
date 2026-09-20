@@ -28,7 +28,8 @@ See [INSTALL.md](INSTALL.md) for the full step-by-step guide.
 
 - **Not installed:** Install dependencies · Install website · Status · Exit
 - **Installed:** Dependencies · Uninstall (frontend / database / both) ·
-  Update · Reinstall · Status · Exit
+  Update · Reinstall · **Manage admin users** (list / create / change
+  password / delete) · Status · Exit
 
 ## Files
 
