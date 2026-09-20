@@ -1,4 +1,4 @@
-# BrineTeam — Hosting Website Installer
+# BrineStudios — Hosting Website Installer
 
 **BrineStudios** · CEO: **brineajay** · https://github.com/brineajay-94/Hosting-Website
 
@@ -10,7 +10,14 @@ An interactive installer/menu that sets up and manages a hosting website
 ```bash
 git clone https://github.com/brineajay-94/Hosting-Website.git
 cd Hosting-Website
-sudo bash brineteam.sh
+sudo bash brinestudios.sh
+```
+
+After the first run a global command is installed, so you can open the
+menu from anywhere:
+
+```bash
+sudo brinestudios
 ```
 
 Then pick:
@@ -34,11 +41,12 @@ See [INSTALL.md](INSTALL.md) for the full step-by-step guide.
 ## Files
 
 ```
-brineteam.sh            entry point (the menu)
+brinestudios.sh         entry point (the menu) + installs the `brinestudios` command
 installer/config.sh     branding, paths, dependency list
 installer/lib/ui.sh     banner, colours, menu, prompts
 installer/lib/deps.sh   dependency detection + install
 installer/lib/site.sh   install / uninstall / update / reinstall
+installer/lib/users.sh  admin user management
 site/                   the website that gets deployed
 ```
 

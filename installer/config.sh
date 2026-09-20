@@ -6,10 +6,14 @@
 
 # ---- Company / branding ----------------------------------------------------
 BT_COMPANY="BrineStudios"
-BT_PRODUCT="BrineTeam"
+BT_PRODUCT="BrineStudios"
 BT_CEO="brineajay"
 BT_VERSION="1.0.0"
 BT_REPO="https://github.com/brineajay-94/Hosting-Website"
+
+# ---- Global command --------------------------------------------------------
+BT_CMD="brinestudios"
+BT_BIN="/usr/local/bin"
 
 # ---- Where the installer lives / site payload ------------------------------
 BT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"

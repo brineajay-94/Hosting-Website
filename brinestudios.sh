@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 # ============================================================
-#  BrineTeam — Hosting control installer
+#  BrineStudios — Hosting control installer
 #  BrineStudios  ·  CEO: brineajay
 #
 #  Run on the server:
-#      sudo bash brineteam.sh
+#      sudo brinestudios
+#  or from the project folder:
+#      sudo bash brinestudios.sh
 # ============================================================
 
 set -u
@@ -24,6 +26,7 @@ BT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 bt_require_root
 bt_ensure_state_dir
+bt_ensure_command
 
 # ---- State line shown under the banner -------------------------------------
 bt_state_line() {
@@ -86,8 +89,8 @@ main() {
   done
 
   clear 2>/dev/null || true
-  printf '%s\n' "${C_ORANGE}${C_BOLD}  Thanks for using BrineTeam — $BT_COMPANY${C_RESET}"
-  printf '%s\n\n' "${C_DIM}  CEO: $BT_CEO  ·  $BT_REPO${C_RESET}"
+  printf '%s\n' "${C_ORANGE}${C_BOLD}  Thanks for using $BT_PRODUCT — $BT_COMPANY${C_RESET}"
+  printf '%s\n\n' "${C_DIM}  CEO: $BT_CEO  ·  run 'sudo $BT_CMD' to reopen this menu${C_RESET}"
 }
 
 main "$@"

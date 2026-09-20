@@ -7,7 +7,13 @@ sudo apt update
 sudo apt install -y git
 git clone https://github.com/brineajay-94/Hosting-Website.git
 cd Hosting-Website
-sudo bash brineteam.sh
+sudo bash brinestudios.sh
+```
+
+The first run installs a global command, so afterwards you can just run:
+
+```bash
+sudo brinestudios
 ```
 
 ## In the menu
@@ -21,5 +27,6 @@ Then open `https://your-domain/admin` and log in.
 
 ## Later
 
-Run `sudo bash brineteam.sh` again any time. If the website is already
-installed you get: **Uninstall**, **Update** and **Reinstall** options.
+Run `sudo brinestudios` any time. If the website is already installed you
+get: **Uninstall**, **Update**, **Reinstall** and **Manage admin users**
+options.

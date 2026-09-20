@@ -36,19 +36,37 @@ bt_banner() {
   clear 2>/dev/null || true
   printf '%s' "${C_ORANGE}${C_BOLD}"
   cat <<'ASCII'
-   ____       _         _____
-  | __ ) _ __(_)_ __   |_   _|__  __ _ _ __ ___
-  |  _ \| '__| | '_ \    | |/ _ \/ _` | '_ ` _ \
-  | |_) | |  | | | | |   | |  __/ (_| | | | | | |
-  |____/|_|  |_|_| |_|   |_|\___|\__,_|_| |_| |_|
+   ____       _
+  | __ ) _ __(_)_ __   ___
+  |  _ \| '__| | '_ \ / _ \
+  | |_) | |  | | | | |  __/
+  |____/|_|  |_|_| |_|\___|
 ASCII
   printf '%s' "${C_RESET}"
-  printf '%s\n' "${C_BOLD}         Hosting control installer${C_RESET}"
+  printf '%s\n' "${C_BOLD}        B R I N E S T U D I O S${C_RESET}"
+  printf '%s\n' "${C_DIM}              Hosting control installer${C_RESET}"
   bt_hr
   printf '  %s   %s\n' "${C_DIM}Company:${C_RESET}" "${C_BOLD}$BT_COMPANY${C_RESET}"
   printf '  %s       %s\n' "${C_DIM}CEO:${C_RESET}" "$BT_CEO"
   printf '  %s   %s  %s\n' "${C_DIM}Version:${C_RESET}" "$BT_VERSION" "${C_DIM}·  $BT_REPO${C_RESET}"
   bt_hr
+}
+
+# ---- Install the global "brinestudios" command -----------------------------
+bt_ensure_command() {
+  [ -d "$BT_BIN" ] || mkdir -p "$BT_BIN" 2>/dev/null || return 0
+  [ -w "$BT_BIN" ] || return 0
+  local target="$BT_ROOT/brinestudios.sh"
+  [ -f "$target" ] || return 0
+  cat >"$BT_BIN/$BT_CMD" <<EOF
+#!/usr/bin/env bash
+# $BT_PRODUCT launcher — opens the control menu from anywhere
+if [ "\$(id -u)" -ne 0 ]; then
+  exec sudo bash "$target" "\$@"
+fi
+exec bash "$target" "\$@"
+EOF
+  chmod +x "$BT_BIN/$BT_CMD" 2>/dev/null || true
 }
 
 # ---- Root check ------------------------------------------------------------
