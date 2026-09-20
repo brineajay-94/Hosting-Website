@@ -51,6 +51,19 @@ bt_mysql_root() { # run SQL as root over the local socket
   if command -v mariadb >/dev/null 2>&1; then mariadb -e "$1"; else mysql -e "$1"; fi
 }
 
+# Run one or more SQL statements, log output, surface errors. Returns mysql status.
+bt_sql() { # $1 = SQL
+  bt_ensure_state_dir
+  local out rc
+  out="$(bt_mysql_root "$1" 2>&1)"; rc=$?
+  [ -n "$out" ] && printf '%s\n' "$out" >>"$BT_LOG_FILE"
+  if [ "$rc" -ne 0 ]; then
+    printf '%s\n' "$out" >&2
+    return "$rc"
+  fi
+  return 0
+}
+
 bt_db_exists() {
   local out
   out="$(bt_mysql_root "SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME='$1';" 2>/dev/null)"
@@ -58,15 +71,15 @@ bt_db_exists() {
 }
 
 bt_db_create() { # $1 db, $2 user, $3 pass
-  bt_mysql_root "CREATE DATABASE IF NOT EXISTS \`$1\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;" 2>&1 | tee -a "$BT_LOG_FILE"
-  bt_mysql_root "CREATE USER IF NOT EXISTS '$1'@'localhost' IDENTIFIED BY '$2';" 2>&1 | tee -a "$BT_LOG_FILE"
-  bt_mysql_root "CREATE USER IF NOT EXISTS '$1'@'127.0.0.1' IDENTIFIED BY '$2';" 2>&1 | tee -a "$BT_LOG_FILE"
-  bt_mysql_root "GRANT ALL PRIVILEGES ON \`$1\`.* TO '$1'@'localhost'; GRANT ALL PRIVILEGES ON \`$1\`.* TO '$1'@'127.0.0.1'; FLUSH PRIVILEGES;" 2>&1 | tee -a "$BT_LOG_FILE"
+  bt_sql "CREATE DATABASE IF NOT EXISTS \`$1\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;" || return 1
+  bt_sql "CREATE USER IF NOT EXISTS '$1'@'localhost' IDENTIFIED BY '$2';" || return 1
+  bt_sql "CREATE USER IF NOT EXISTS '$1'@'127.0.0.1' IDENTIFIED BY '$2';" || return 1
+  bt_sql "GRANT ALL PRIVILEGES ON \`$1\`.* TO '$1'@'localhost'; GRANT ALL PRIVILEGES ON \`$1\`.* TO '$1'@'127.0.0.1'; FLUSH PRIVILEGES;" || return 1
 }
 
 bt_db_drop() { # $1 db, $2 user
-  bt_mysql_root "DROP DATABASE IF EXISTS \`$1\`;" 2>&1 | tee -a "$BT_LOG_FILE"
-  bt_mysql_root "DROP USER IF EXISTS '$1'@'localhost'; DROP USER IF EXISTS '$1'@'127.0.0.1'; FLUSH PRIVILEGES;" 2>&1 | tee -a "$BT_LOG_FILE"
+  bt_sql "DROP DATABASE IF EXISTS \`$1\`;" || true
+  bt_sql "DROP USER IF EXISTS '$1'@'localhost'; DROP USER IF EXISTS '$1'@'127.0.0.1'; FLUSH PRIVILEGES;" || true
 }
 
 # ---- Nginx helpers ---------------------------------------------------------
@@ -228,10 +241,19 @@ bt_install_site() {
   bt_collect_inputs || return 1
 
   bt_step "Creating database"
+  bt_ensure_state_dir
+  if ! bt_sql "SELECT 1;" >/dev/null 2>&1; then
+    bt_err "Cannot connect to MariaDB as root over the local socket."
+    bt_info "Install/start MariaDB first (menu option 1), then try again."
+    return 1
+  fi
   if bt_db_exists "$BT_ST_DB_NAME"; then
     bt_warn "Database '$BT_ST_DB_NAME' already exists — reusing it."
   fi
-  bt_db_create "$BT_ST_DB_NAME" "$BT_ST_DB_USER" "$BT_ST_DB_PASS" || { bt_err "Database setup failed."; return 1; }
+  if ! bt_db_create "$BT_ST_DB_NAME" "$BT_ST_DB_USER" "$BT_ST_DB_PASS"; then
+    bt_err "Database setup failed — see $BT_LOG_FILE for details."
+    return 1
+  fi
   bt_ok "Database ready"
 
   bt_step "Copying website files"

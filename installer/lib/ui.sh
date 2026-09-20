@@ -21,8 +21,13 @@ bt_warn() { printf '%s\n' "${C_YELLOW}[!]${C_RESET} $*"; }
 bt_err()  { printf '%s\n' "${C_RED}[✗]${C_RESET} $*" >&2; }
 bt_step() { printf '\n%s\n' "${C_BOLD}${C_ORANGE}▶ $*${C_RESET}"; }
 
+bt_ensure_state_dir() {
+  [ -d "$BT_STATE_DIR" ] || mkdir -p "$BT_STATE_DIR" 2>/dev/null || true
+  [ -f "$BT_LOG_FILE" ] || : >"$BT_LOG_FILE" 2>/dev/null || true
+}
+
 bt_log() {
-  [ -d "$BT_STATE_DIR" ] || mkdir -p "$BT_STATE_DIR" 2>/dev/null
+  bt_ensure_state_dir
   printf '[%s] %s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$*" >>"$BT_LOG_FILE" 2>/dev/null
 }
 

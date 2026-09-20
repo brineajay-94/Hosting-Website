@@ -21,6 +21,7 @@ BT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 . "$BT_ROOT/installer/lib/site.sh"
 
 bt_require_root
+bt_ensure_state_dir
 
 # ---- State line shown under the banner -------------------------------------
 bt_state_line() {

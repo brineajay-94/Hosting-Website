@@ -104,6 +104,7 @@ bt_install_deps() {
     return 1
   fi
 
+  bt_ensure_state_dir
   export DEBIAN_FRONTEND=noninteractive
   bt_step "Updating package lists"
   apt-get update -y 2>&1 | tee -a "$BT_LOG_FILE"
